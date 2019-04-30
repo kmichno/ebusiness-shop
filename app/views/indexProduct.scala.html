@@ -1,0 +1,19 @@
+@(product: Form[CreateProductForm])(implicit request: MessagesRequestHeader)
+
+@import helper._
+
+@request.flash.get("success").map { key =>
+   @request.messages(key)
+}
+
+@main("Welcome to Play") {
+  @form(routes.ProductController.addProduct()) {
+		@inputText(product("name"))
+		@inputText(product("price"))
+		@CSRF.formField
+
+		<div class="buttons">
+			<input type="submit" value="Add Product"/>
+		</div>
+	}
+}
