@@ -20,7 +20,9 @@ class ProductController @Inject()(repo: ProductRepository,
   val productForm: Form[CreateProductForm] = Form {
     mapping(
       "name" -> nonEmptyText,
-      "price" -> number.verifying(min(0), max(140))
+      "description" -> nonEmptyText,
+      "price" -> number.verifying(min(0), max(140)),
+      "categoryId" -> number.verifying(min(0), max(140))
     )(CreateProductForm.apply)(CreateProductForm.unapply)
   }
 
@@ -33,8 +35,8 @@ class ProductController @Inject()(repo: ProductRepository,
       errorForm => {
         Future.successful(Ok(views.html.indexProduct(errorForm)))
       },
-      person => {
-        repo.create("sf", 34, "add", 1).map { _ =>
+      product => {
+        repo.create(product.name, product.price, product.description, product.categoryId).map { _ =>
           Redirect(routes.ProductController.addingProduct()).flashing("success" -> "user.created")
         }
       }
@@ -58,4 +60,4 @@ class ProductController @Inject()(repo: ProductRepository,
   }
 }
 
-case class CreateProductForm(name: String, price: Int)
+case class CreateProductForm(name: String, description: String, price: Int, categoryId: Int)

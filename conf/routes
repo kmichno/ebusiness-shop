@@ -4,9 +4,9 @@
 
 # Home page
 GET     /                           controllers.PersonController.index
-POST    /person                     controllers.PersonController.addUser
-GET     /persons                    controllers.PersonController.getPersons
-#POST    /adduser                    controllers.UserController.addUser
+POST    /register                     controllers.PersonController.addUser
+GET     /users                    controllers.PersonController.getPersons
+
 GET     /getuser/:id                controllers.PersonController.getPerson(id: Integer)
 #GET     /edituser/:id               controllers.UserController.editUser(id: Integer)
 # Map static resources from the /public folder to the /assets URL path
@@ -14,10 +14,13 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET     /adding                     controllers.ProductController.addingProduct
 GET     /product/:id                controllers.ProductController.getProduct(id: Integer)
-GET     /category/:id               controllers.ProductController.getProductsForCategory(id: Integer)
+# GET     /category/:id               controllers.ProductController.getProductsForCategory(id: Integer)
 GET     /products                   controllers.ProductController.getProducts
 POST    /addproduct                controllers.ProductController.addProduct
+GET     /categories                controllers.CategoryController.getCategories
+POST    /addcategory                controllers.CategoryController.add
 
-GET     /order/:id                  controllers.OrderController.getOrder(id: Integer)
-GET     /orders                     controllers.OrderController.getOrders(userId: Integer)
-POST    /takeorder                  controllers.OrderController.takeOrder
+#GET     /order/:id                  controllers.OrderController.getOrder(id: Integer)
+#GET     /orders                     controllers.OrderController.getOrders(userId: Integer)
+GET     /orders                     controllers.OrderController.getOrders
+POST    /addorder                  controllers.OrderController.addOrder

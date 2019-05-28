@@ -20,7 +20,8 @@ class PersonController @Inject()(repo: PersonRepository,
   val personForm: Form[CreatePersonForm] = Form {
     mapping(
       "name" -> nonEmptyText,
-      "age" -> number.verifying(min(0), max(140))
+      "age" -> number.verifying(min(0), max(140)),
+      "address" -> nonEmptyText,
     )(CreatePersonForm.apply)(CreatePersonForm.unapply)
   }
 
@@ -34,7 +35,7 @@ class PersonController @Inject()(repo: PersonRepository,
         Future.successful(Ok(views.html.index(errorForm)))
       },
       person => {
-        repo.create(person.name, person.age, "add").map { _ =>
+        repo.create(person.name, person.age, person.address).map { _ =>
           Redirect(routes.PersonController.index).flashing("success" -> "user.created")
         }
       }
@@ -54,4 +55,4 @@ class PersonController @Inject()(repo: PersonRepository,
   }
 }
 
-case class CreatePersonForm(name: String, age: Int)
+case class CreatePersonForm(name: String, age: Int, address: String)

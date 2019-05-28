@@ -21,11 +21,35 @@ class OrderController @Inject()(repo: OrderRepository,
     Ok("ok")
   }
 
-  def getOrders = {
-    Ok("ok")
+  def getOrders = Action.async { implicit request =>
+    repo.list().map { category =>
+      Ok(Json.toJson(category))
+    }
+  }
+
+  val orderForm: Form[CreateOrderForm] = Form {
+    mapping(
+      "order_date" -> nonEmptyText,
+      "userId" -> number.verifying(min(0), max(140))
+    )(CreateOrderForm.apply)(CreateOrderForm.unapply)
+  }
+
+  def addOrder = Action.async { implicit request =>
+    orderForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(Ok("df"))
+      },
+      order => {
+        repo.create(order.order_date, order.userId).map { _ =>
+          Redirect(routes.ProductController.addingProduct()).flashing("success" -> "user.created")
+        }
+      }
+    )
   }
 
   def getOrder(id: Integer) = {
     Ok("ok")
   }
 }
+
+case class CreateOrderForm(order_date: String, userId: Int)
